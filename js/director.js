@@ -1,4 +1,12 @@
 
+const colorMap = {
+    "Resident": 0xFF0000,
+    "Park": 0x298F2E,
+    "Commercial": 0x000DFF,
+    "Industry": 0x555555,
+    "Blank": 0xDDDDDD
+}
+
 class Director {
     
     board
@@ -7,6 +15,7 @@ class Director {
     activeBlock
     activeButton
     buttons = []
+    score
 
     // pixi
     app
@@ -22,6 +31,7 @@ class Director {
         this.activeBlock = null;
         this.activeButton = null;
         this.mouseDown = false;
+        this.score = new Score(this.rows, this.columns);
         
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = [];

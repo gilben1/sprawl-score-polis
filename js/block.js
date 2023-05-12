@@ -1,13 +1,4 @@
 
-let colorMap = {
-    "Resident": 0xFF0000,
-    "Park": 0x298F2E,
-    "Commercial": 0x000DFF,
-    "Industry": 0x555555,
-    "Blank": 0xDDDDDD
-}
-
-
 class Block {
     color // orange, blue, green, grey
     roads // TBD
@@ -31,6 +22,7 @@ class Block {
         this.graphics.on('pointerdown',(event) => {
             if (null !== director.activeButton) {
                 this.setColor(director.activeButton.color);
+                director.score.updateLargest(director.board);
             }
             director.mouseDown = true;
         })
@@ -38,9 +30,13 @@ class Block {
             if (!director.mouseDown) return;
             if (null !== director.activeButton) {
                 this.setColor(director.activeButton.color);
+                director.score.updateLargest(director.board);
             }
         })
         this.graphics.on('pointerup',(event) => {
+            director.mouseDown = false;
+        })
+        this.graphics.on('pointerupoutside',(event) => {
             director.mouseDown = false;
         })
     }
