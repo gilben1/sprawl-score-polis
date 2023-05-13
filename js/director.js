@@ -7,6 +7,20 @@ const colorMap = {
     "Blank": 0xDDDDDD
 }
 
+const opposites = {
+    "N": "S",
+    "S": "N",
+    "W": "E",
+    "E": "W"
+}
+
+const adjacent = {
+    "N": ["E", "W"],
+    "S": ["E", "W"],
+    "W": ["N", "S"],
+    "E": ["N", "S"]
+}
+
 class Director {
     
     board
@@ -16,6 +30,7 @@ class Director {
     activeButton
     buttons = []
     score
+    lastKeypress = null;
 
     // pixi
     app
@@ -92,6 +107,7 @@ class Director {
     }
 
     updateActiveBlock(newBlock) {
+        if (newBlock == null) return;
         if (this.activeBlock != null) {
             this.activeBlock.setInactive();
         }
@@ -107,6 +123,33 @@ class Director {
     addRoads(direction) {
         if (this.activeBlock == null) return;
         this.activeBlock.updateRoad(direction);
+    }
+
+    getAdjacentBlock(direction, block) {
+        let newBlock = null;
+        let x = block.pos.x[0];
+        let y = block.pos.y[0];
+        switch (direction) {
+            case "N":
+                y--;
+                break;
+            case "S":
+                y++;
+                break;
+            case "W":
+                x--; 
+                break;
+            case "E":
+                x++;
+                break;
+        }
+        if (x > 0 && x < this.columns && y > 0 && y < this.rows) {
+            return this.board[y][x];
+        }
+        else {
+            return null;
+        }
+
     }
 
 }

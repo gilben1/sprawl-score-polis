@@ -18,11 +18,16 @@ class Score {
         this.calculateLargestGroup("Commercial", board);
         this.calculateLargestGroup("Industry", board);
         let scoreDiv = document.getElementById("scoreDiv");
+        let total = 0
+        for (const [key, value] of Object.entries(this.largest)) {
+            total += value;
+        }
         scoreDiv.innerHTML = `
             Resident: ${this.largest["Resident"]}
             Park: ${this.largest["Park"]}
             Commercial: ${this.largest["Commercial"]}
             Industry: ${this.largest["Industry"]}
+            Total: ${total}
         `
     }
 
