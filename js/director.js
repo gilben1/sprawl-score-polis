@@ -90,7 +90,7 @@ class Director {
     }
 
     updateScores() {
-        this.score.updateLargest(this.board);
+        this.score.updateScores(this.board);
     }
 
     updateActiveButton(newButton) {
@@ -143,7 +143,7 @@ class Director {
                 x++;
                 break;
         }
-        if (x > 0 && x < this.columns && y > 0 && y < this.rows) {
+        if (x >= 0 && x < this.columns && y >= 0 && y < this.rows) {
             return this.board[y][x];
         }
         else {

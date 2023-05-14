@@ -115,6 +115,7 @@ class Block {
             let newBlock = director.getAdjacentBlock(direction, this);
             director.updateActiveBlock(newBlock);
         }
+        director.updateScores();
         
         this.renderCard();
     }
