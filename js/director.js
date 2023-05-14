@@ -28,7 +28,13 @@ class Director {
     columns
     activeBlock
     activeButton
-    buttons = []
+    buttons = {
+        "Resident": null,
+        "Park": null,
+        "Commercial": null,
+        "Industry": null,
+        "Blank": null
+    }
     score
     lastKeypress = null;
 
@@ -58,21 +64,21 @@ class Director {
         console.info(this.board)
 
         // set up the block setting buttons
-        this.buttons[0] = new Button("Resident", 0, this.rows + 1);
-        this.buttons[1] = new Button("Park", 1, this.rows + 1);
-        this.buttons[2] = new Button("Commercial", 2, this.rows + 1);
-        this.buttons[3] = new Button("Industry", 3, this.rows + 1);
-        this.buttons[4] = new Button("Blank", 4, this.rows + 1);
+        this.buttons["Resident"] = new Button("Resident", 0, this.rows + 1);
+        this.buttons["Park"] = new Button("Park", 1, this.rows + 1);
+        this.buttons["Commercial"] = new Button("Commercial", 2, this.rows + 1);
+        this.buttons["Industry"] = new Button("Industry", 3, this.rows + 1);
+        this.buttons["Blank"] = new Button("Blank", 4, this.rows + 1);
 
         // link the buttons together for easy cycling
-        this.buttons[0].setNextButton(this.buttons[1]);
-        this.buttons[1].setNextButton(this.buttons[2]);
-        this.buttons[2].setNextButton(this.buttons[3]);
-        this.buttons[3].setNextButton(this.buttons[4]);
-        this.buttons[4].setNextButton(this.buttons[0]);
+        this.buttons["Resident"].setNextButton(this.buttons["Park"]);
+        this.buttons["Park"].setNextButton(this.buttons["Commercial"]);
+        this.buttons["Commercial"].setNextButton(this.buttons["Industry"]);
+        this.buttons["Industry"].setNextButton(this.buttons["Blank"]);
+        this.buttons["Blank"].setNextButton(this.buttons["Resident"]);
 
-        for (let but of this.buttons) {
-            this.app.stage.addChild(but.graphics);
+        for (const [key, value] of Object.entries(this.buttons)) {
+            this.app.stage.addChild(value.graphics);
         }
 
     }
@@ -118,6 +124,16 @@ class Director {
             this.activeBlock = newBlock;
             this.activeBlock.setActive();
         }
+    }
+
+    removeActiveBlock() {
+        this.activeBlock.setInactive();
+        this.activeBlock = null;
+    }
+    
+    removeActiveButton() {
+        this.activeButton.setInactive();
+        this.activeButton = null;
     }
 
     addRoads(direction) {

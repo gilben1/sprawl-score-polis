@@ -54,6 +54,9 @@ let downKey = keyboard("ArrowDown");
 let leftKey = keyboard("ArrowLeft");
 let rightKey = keyboard("ArrowRight");
 let tabKey = keyboard("Tab");
+let escapeKey = keyboard("Escape");
+let deleteKey = keyboard("Delete");
+let backspaceKey = keyboard("Backspace");
 
 upKey.press = ()  => {
     director.addRoads('N');
@@ -70,4 +73,13 @@ rightKey.press = ()  => {
 
 tabKey.press = () => {
     director.cycleColor();
+}
+
+escapeKey.press = () => {
+    if (director.activeBlock == null) {
+        director.removeActiveButton();
+    }
+    else {
+        director.removeActiveBlock();
+    }
 }

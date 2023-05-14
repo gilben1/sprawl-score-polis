@@ -28,13 +28,18 @@ class Block {
         this.graphics.interactive = true;
 
         this.graphics.on('pointerdown',(event) => {
-            if (null !== director.activeButton) {
-                this.setColor(director.getSelectedColor());
-                director.updateScores();
+            if (event.data.originalEvent.button == 0) {
+                if (null !== director.activeButton) {
+                    this.setColor(director.getSelectedColor());
+                    director.updateScores();
+                }
+                director.mouseDown = true;
+                director.updateActiveBlock(this);
+                director.lastKeypress = null;
             }
-            director.mouseDown = true;
-            director.updateActiveBlock(this);
-            director.lastKeypress = null;
+            else if (event.data.originalEvent.button == 1) {
+                director.updateActiveButton()
+            }
         })
         this.graphics.on('pointermove',(event) => {
             if (!director.mouseDown) return;
