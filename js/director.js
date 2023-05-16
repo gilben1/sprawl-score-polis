@@ -44,6 +44,8 @@ class Director {
 
     mouseDown
 
+    drawRoads
+
     constructor(app, resources) {
         this.app = app;
         this.rows = 16;
@@ -96,6 +98,7 @@ class Director {
     }
 
     updateScores() {
+        this.calculateEdges();
         this.score.updateScores(this.board);
     }
 
@@ -138,7 +141,15 @@ class Director {
 
     addRoads(direction) {
         if (this.activeBlock == null) return;
-        this.activeBlock.updateRoad(direction);
+        let drawRoads = document.getElementById("drawRoads");
+        // if draw roads is checked, draw some roads!
+        if (drawRoads.checked) {
+            this.activeBlock.updateRoad(direction);
+        }
+        else { // otherwise, just move to the adjacent block
+            let newBlock = this.getAdjacentBlock(direction, this.activeBlock);
+            director.updateActiveBlock(newBlock);
+        }
     }
 
     getAdjacentBlock(direction, block) {
@@ -165,7 +176,50 @@ class Director {
         else {
             return null;
         }
+    }
 
+    calculateEdges() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].edges["N"] = false;
+                this.board[i][j].edges["W"] = false;
+                this.board[i][j].edges["S"] = false;
+                this.board[i][j].edges["E"] = false;
+                this.board[i][j].isEdge = true;
+
+                // north edge
+                if (i - 1 < 0 || this.board[i-1][j].color == "Blank") {
+                    this.board[i][j].edges["N"] = true;
+                    this.board[i][j].isEdge = true;
+                }
+                if (j - 1 < 0 || this.board[i][j-1].color == "Blank") {
+                    this.board[i][j].edges["W"] = true;
+                    this.board[i][j].isEdge = true;
+                }
+                if (i + 1 >= this.rows || this.board[i+1][j].color == "Blank") {
+                    this.board[i][j].edges["S"] = true;
+                    this.board[i][j].isEdge = true;
+                }
+                if (j + 1 >= this.columns || this.board[i][j+1].color == "Blank") {
+                    this.board[i][j].edges["E"] = true;
+                    this.board[i][j].isEdge = true;
+                }
+
+                this.board[i][j].renderCard();
+            }
+        }
+    }
+
+    clearActiveBlock() {
+        this.activeBlock.clearRoads();
+        this.activeBlock.color = "Blank";
+        this.activeBlock.renderCard();
+    }
+
+    updateColor(color) {
+        this.activeBlock.setColor(color);
+        this.activeBlock.renderCard();
+        this.updateScores();
     }
 
 }

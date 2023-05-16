@@ -12,6 +12,14 @@ class Block {
         x: [0,0],
         y: [0,0]
     }
+    
+    isEdge
+    edges = {
+        "N": false,
+        "S": false,
+        "E": false,
+        "W": false,
+    }
 
 
     graphics
@@ -22,6 +30,7 @@ class Block {
         this.pos.y[0] = y;
         this.pos.x[1] = x * 43 + 10; // real
         this.pos.y[1] = y * 29 + 10;
+        this.isEdge = false;
 
         this.graphics = new Graphics();
         this.renderCard();
@@ -38,7 +47,9 @@ class Block {
                 director.lastKeypress = null;
             }
             else if (event.data.originalEvent.button == 1) {
-                director.updateActiveButton()
+                if (this.color != director.buttons[this.color].color) {
+                    director.updateActiveButton(director.buttons[this.color]);
+                }
             }
         })
         this.graphics.on('pointermove',(event) => {
@@ -87,6 +98,26 @@ class Block {
         if (this.roads["W"]) {
             this.graphics.moveTo(this.pos.x[1] + 20, this.pos.y[1] + 13)
             this.graphics.lineTo(this.pos.x[1], this.pos.y[1] + 13)
+        }
+        
+        if (this.isEdge && this.color != "Blank") {
+            this.graphics.lineStyle(2, 0xFF0000);
+            if (this.edges["N"]) {
+                this.graphics.moveTo(this.pos.x[1], this.pos.y[1]);
+                this.graphics.lineTo(this.pos.x[1] + 40, this.pos.y[1]);
+            }
+            if (this.edges["W"]) {
+                this.graphics.moveTo(this.pos.x[1], this.pos.y[1]);
+                this.graphics.lineTo(this.pos.x[1], this.pos.y[1] + 26);
+            }
+            if (this.edges["E"]) {
+                this.graphics.moveTo(this.pos.x[1] + 40, this.pos.y[1]);
+                this.graphics.lineTo(this.pos.x[1] + 40, this.pos.y[1] + 26);
+            }
+            if (this.edges["S"]) {
+                this.graphics.moveTo(this.pos.x[1], this.pos.y[1] + 26);
+                this.graphics.lineTo(this.pos.x[1] + 40, this.pos.y[1] + 26);
+            }
         }
     
     }

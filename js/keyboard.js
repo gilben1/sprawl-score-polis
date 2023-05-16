@@ -57,6 +57,11 @@ let tabKey = keyboard("Tab");
 let escapeKey = keyboard("Escape");
 let deleteKey = keyboard("Delete");
 let backspaceKey = keyboard("Backspace");
+let Key1 = keyboard("1");
+let Key2 = keyboard("2");
+let Key3 = keyboard("3");
+let Key4 = keyboard("4");
+let lshiftKey = keyboard("Shift");
 
 upKey.press = ()  => {
     director.addRoads('N');
@@ -82,4 +87,45 @@ escapeKey.press = () => {
     else {
         director.removeActiveBlock();
     }
+}
+
+deleteKey.press = () => {
+    if (director.activeBlock != null) {
+        director.clearActiveBlock();
+    }
+}
+
+backspaceKey.press = () => {
+    if (director.activeBlock != null) {
+        director.clearActiveBlock();
+    }
+}
+
+Key1.press = () => {
+    if (director.activeBlock != null) {
+        director.updateColor("Resident");
+    }
+}
+
+Key2.press = () => {
+    if (director.activeBlock != null) {
+        director.updateColor("Park");
+    }
+}
+
+Key3.press = () => {
+    if (director.activeBlock != null) {
+        director.updateColor("Commercial");
+    }
+}
+
+Key4.press = () => {
+    if (director.activeBlock != null) {
+        director.updateColor("Industry");
+    }
+}
+
+lshiftKey.press = () => {
+    let drawRoads = document.getElementById("drawRoads");
+    drawRoads.checked = !drawRoads.checked; 
 }

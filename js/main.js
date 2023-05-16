@@ -18,8 +18,8 @@ if(!PIXI.utils.isWebGLSupported()){
 PIXI.utils.sayHello(type)
 
 let app = new Application({
-    width: 1000, 
-    height: 600,
+    width: 700, 
+    height: 525,
     backgroundColor: 0xFFFFFF
 });
 
