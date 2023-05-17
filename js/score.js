@@ -6,6 +6,11 @@ class Score {
         "Commercial": 0,
         "Industry": 0
     }
+    cardScores = {
+        2: [0, 0],
+        10: [0, 0],
+        18: [0, 0]
+    }
     visitBoard = [[],[]];
 
     constructor(rows, columns) {
@@ -23,7 +28,12 @@ class Score {
         for (const [key, value] of Object.entries(this.largest)) {
             total += value;
         }
-        let overallScore = total - roadCount;
+        let overallScore = total + roadCount;
+
+        this.cardScores[2] = this.scoreCard2(board);
+        this.cardScores[10] = this.scoreCard10(board);
+        this.cardScores[18] = this.scoreCard18(board);
+
 
         scoreDiv.innerHTML = `
             Resident: ${this.largest["Resident"]}<br>
@@ -32,9 +42,13 @@ class Score {
             Industry: ${this.largest["Industry"]}<br>
             Blocks Total: ${total}<br>
             -----------<br>
-            Roads: -${roadCount}<br>
+            Roads: ${roadCount}<br>
             -----------<br>
-            Overall Score: ${overallScore}
+            Overall Score: ${overallScore}<br>
+            -----------<br>
+            Card 2 "Bloom Boom" Score: +${this.cardScores[2][0]}, ${this.cardScores[2][1]}<br>
+            Card 10 "The Strip" Score: +${this.cardScores[10][0]}, ${this.cardScores[10][1]}<br>
+            Card 18 "Sprawlopolis" Score: +${this.cardScores[18][0]}, ${this.cardScores[18][1]}<br>
             
         `
     }
@@ -91,7 +105,7 @@ class Score {
                 }
             }
         }
-        return roadCount;
+        return roadCount * -1;
     }
 
     findConnectedRoads(board, i, j, direction) {
@@ -126,5 +140,83 @@ class Score {
             // otherwise, return without counting it as a visit
             return 0;
         }
+    }
+
+    // Card 2: Bloom Boom
+    scoreCard2(board) {
+        // Rules: +1pt per column and row w/ exactly 3 park blocks
+        //        -1pt per column and row w/ 0 park blocks
+        let rowCounter = [...Array(board.length).fill(0)];
+        let colCounter = [...Array(board[0].length).fill(0)];
+        let rowBlank = [...Array(board.length).fill(true)];
+        let colBlank = [...Array(board[0].length).fill(true)];
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Park") {
+                    rowCounter[i]++;
+                    colCounter[j]++;
+                }
+                // Set flag for a completely blank row and coloumn to ignore for calculation
+                if (board[i][j].color != "Blank") {
+                    rowBlank[i] = false;
+                    colBlank[j] = false;
+                }
+            }
+        }
+        let positive = 0;
+        let negative = 0;
+        for (let i = 0; i < rowCounter.length; i++) {
+            if (!rowBlank[i]) {
+                if (rowCounter[i] == 3) {
+                    positive++
+                }
+                else if (rowCounter[i] == 0) {
+                    negative++
+                }
+            }
+            if (!colBlank[i]) {
+                if (colCounter[i] == 3) {
+                    positive++
+                }
+                else if (colCounter[i] == 0) {
+                    negative++
+                }
+            }
+        }
+        return [positive, negative]
+    }
+
+
+    // Card 10: The Strip
+    scoreCard10(board) {
+        // Rules: Column or Row w/ the greatest number of "Commercial" blocks
+        //  +1 pt per Commercial block in that column
+        let rowCounter = [...Array(board.length).fill(0)];
+        let colCounter = [...Array(board[0].length).fill(0)];
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Commercial") {
+                    rowCounter[i]++;
+                    colCounter[j]++;
+                }
+            }
+        }
+        return [Math.max(Math.max(...rowCounter),Math.max(...colCounter)), 0]
+    }
+
+    // Card 18: Sprawlopolis
+    scoreCard18(board) {
+        // Rules: Add number of blocks in longest column + number of blocks in longest row
+        let rowCounter = [...Array(board.length).fill(0)];
+        let colCounter = [...Array(board[0].length).fill(0)];
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color != "Blank") {
+                    rowCounter[i]++;
+                    colCounter[j]++;
+                }
+            }
+        }
+        return [Math.max(...rowCounter) + Math.max(...colCounter), 0]
     }
 }
