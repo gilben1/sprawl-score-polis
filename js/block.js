@@ -179,4 +179,15 @@ class Block {
     clearRoads() {
         this.roads["N"] = this.roads["S"] = this.roads["E"] = this.roads["W"] = false;
     }
+
+    isCorner() {
+        let count = 0;
+        for (const [key, value] of Object.entries(this.edges)) {
+            if (value == true && opposites[key] != true) {
+                count++;
+            }
+        }
+
+        return count == 2;
+    }
 }

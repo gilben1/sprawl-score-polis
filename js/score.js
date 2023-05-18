@@ -8,7 +8,10 @@ class Score {
     }
     cardScores = {
         2: [0, 0],
+        3: [0, 0],
+        7: [0, 0],
         10: [0, 0],
+        17: [0, 0],
         18: [0, 0]
     }
     visitBoard = [[],[]];
@@ -31,7 +34,11 @@ class Score {
         let overallScore = total + roadCount;
 
         this.cardScores[2] = this.scoreCard2(board);
+        this.cardScores[3] = this.scoreCard3(board);
+        this.cardScores[6] = this.scoreCard6(board);
+        this.cardScores[7] = this.scoreCard7(board);
         this.cardScores[10] = this.scoreCard10(board);
+        this.cardScores[17] = this.scoreCard17(board);
         this.cardScores[18] = this.scoreCard18(board);
 
 
@@ -47,7 +54,11 @@ class Score {
             Overall Score: ${overallScore}<br>
             -----------<br>
             Card 2 "Bloom Boom" Score: +${this.cardScores[2][0]}, ${this.cardScores[2][1]}<br>
+            Card 3 "Go Green" Score: +${this.cardScores[3][0]}, ${this.cardScores[3][1]}<br>
+            Card 6 "Master Planned" Score: +${this.cardScores[6][0]}, ${this.cardScores[6][1]}<br>
+            Card 7 "Central Perks" Score: +${this.cardScores[7][0]}, ${this.cardScores[7][1]}<br>
             Card 10 "The Strip" Score: +${this.cardScores[10][0]}, ${this.cardScores[10][1]}<br>
+            Card 18 "Tourist Traps" Score: +${this.cardScores[17][0]}, ${this.cardScores[17][1]}<br>
             Card 18 "Sprawlopolis" Score: +${this.cardScores[18][0]}, ${this.cardScores[18][1]}<br>
             
         `
@@ -186,6 +197,53 @@ class Score {
         return [positive, negative]
     }
 
+    // Card 3: Go Green
+    scoreCard3(board) {
+
+        // Rules: +1 / Park in City, -3 per Industrial
+        let parks = 0;
+        let industry = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Park") {
+                    parks++;
+                }
+                else if (board[i][j].color == "Industry") {
+                    industry++;
+                }
+            }
+        }
+        return [parks, industry * -3]
+    }
+    
+    // Card 6: Master Planned
+    scoreCard6(board) {
+
+        // Rules: Subtract largest industrial group from largest residential group, score that many points
+        return [this.largest["Resident"] - this.largest["Industry"], 0]
+    }
+    
+    // Card 7: Central Perks
+    scoreCard7(board) {
+
+        // Rules: +1 / Park in City, -3 per Industrial
+        let inner = 0;
+        let outer = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Park") {
+                    if (board[i][j].isEdge) {
+                        outer++;
+                    }
+                    else {
+                        inner++;
+                    }
+                }
+            }
+        }
+        return [inner, outer * -2]
+    }
+
 
     // Card 10: The Strip
     scoreCard10(board) {
@@ -202,6 +260,25 @@ class Score {
             }
         }
         return [Math.max(Math.max(...rowCounter),Math.max(...colCounter)), 0]
+    }
+
+    // Card 17: Tourist Traps
+    scoreCard17(board) {
+        // Rules: 1pt / Commercial block on the edge, + 1 more if that is a corner edge
+        let sum = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Commercial") {
+                    if (board[i][j].isEdge) {
+                        sum++
+                    }
+                    if (board[i][j].isCorner()) {
+                        sum++
+                    }
+                }
+            }
+        }
+        return [sum, 0]
     }
 
     // Card 18: Sprawlopolis

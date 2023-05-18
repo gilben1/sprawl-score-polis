@@ -185,7 +185,7 @@ class Director {
                 this.board[i][j].edges["W"] = false;
                 this.board[i][j].edges["S"] = false;
                 this.board[i][j].edges["E"] = false;
-                this.board[i][j].isEdge = true;
+                this.board[i][j].isEdge = false;
 
                 // north edge
                 if (i - 1 < 0 || this.board[i-1][j].color == "Blank") {
