@@ -9,6 +9,7 @@ class Score {
     cardScores = {
         2: [0, 0],
         3: [0, 0],
+        5: [0, 0],
         7: [0, 0],
         10: [0, 0],
         17: [0, 0],
@@ -35,6 +36,7 @@ class Score {
 
         this.cardScores[2] = this.scoreCard2(board);
         this.cardScores[3] = this.scoreCard3(board);
+        this.cardScores[5] = this.scoreCard5(board);
         this.cardScores[6] = this.scoreCard6(board);
         this.cardScores[7] = this.scoreCard7(board);
         this.cardScores[10] = this.scoreCard10(board);
@@ -55,6 +57,7 @@ class Score {
             -----------<br>
             Card 2 "Bloom Boom" Score: +${this.cardScores[2][0]}, ${this.cardScores[2][1]}<br>
             Card 3 "Go Green" Score: +${this.cardScores[3][0]}, ${this.cardScores[3][1]}<br>
+            Card 5 "Stacks And Scrapers:" Score: +${this.cardScores[5][0]}, ${this.cardScores[5][1]}<br>
             Card 6 "Master Planned" Score: +${this.cardScores[6][0]}, ${this.cardScores[6][1]}<br>
             Card 7 "Central Perks" Score: +${this.cardScores[7][0]}, ${this.cardScores[7][1]}<br>
             Card 10 "The Strip" Score: +${this.cardScores[10][0]}, ${this.cardScores[10][1]}<br>
@@ -216,6 +219,28 @@ class Score {
         return [parks, industry * -3]
     }
     
+    // Card 5: Stacks and Scraper
+    scoreCard5(board) {
+
+        // Rules: +2 / industrial block only adjacent to industrial or commerical blocks
+        let sum = 0
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].color == "Industry") {
+                    let adjacentColors = board[i][j].getAdjacentColors();
+                    // we only have commercial and industry adjacent to us
+                    if (JSON.stringify(adjacentColors.sort()) == JSON.stringify(["Commercial", "Industry"])
+                    ||  JSON.stringify(adjacentColors) == JSON.stringify(["Commercial"])
+                    ||  JSON.stringify(adjacentColors) == JSON.stringify(["Industry"])
+                    ) {
+                        sum++
+                    }
+                }
+            }
+        }
+        return [sum * 2, 0]
+    }
+    
     // Card 6: Master Planned
     scoreCard6(board) {
 
@@ -226,7 +251,7 @@ class Score {
     // Card 7: Central Perks
     scoreCard7(board) {
 
-        // Rules: +1 / Park in City, -3 per Industrial
+        // Rules: +1 / parks not on the edge, -2 per parks on the edge
         let inner = 0;
         let outer = 0;
         for (let i = 0; i < board.length; i++) {

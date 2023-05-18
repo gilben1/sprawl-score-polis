@@ -30,4 +30,5 @@ window.onload = () => {
 };
 
 director = new Director(app, null);
+director.initAdjacentBlocks();
 console.log(director.board)

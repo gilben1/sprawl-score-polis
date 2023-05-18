@@ -21,6 +21,13 @@ class Block {
         "W": false,
     }
 
+    adjacent = {
+        "N": null,
+        "S": null,
+        "E": null,
+        "W": null,
+    }
+
 
     graphics
 
@@ -173,7 +180,6 @@ class Block {
             }
         }
         return count == 2;
-
     }
 
     clearRoads() {
@@ -189,5 +195,24 @@ class Block {
         }
 
         return count == 2;
+    }
+
+    calculateAdjacentBlocks() {
+        this.adjacent["N"] = director.getAdjacentBlock("N", this);
+        this.adjacent["S"] = director.getAdjacentBlock("S", this);
+        this.adjacent["W"] = director.getAdjacentBlock("W", this);
+        this.adjacent["E"] = director.getAdjacentBlock("E", this);
+    }
+
+    getAdjacentColors() {
+        let adjColors = []
+
+        for (const [key, value] of Object.entries(this.adjacent)) {
+            if (value != null && value.color != "Blank") {
+                adjColors.push(value.color);
+            }
+        }
+
+        return Array.from(new Set(adjColors))
     }
 }

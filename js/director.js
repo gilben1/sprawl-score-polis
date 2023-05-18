@@ -63,6 +63,8 @@ class Director {
                 this.app.stage.addChild(this.board[i][j].graphics);
             }
         }
+
+
         console.info(this.board)
 
         // set up the block setting buttons
@@ -82,7 +84,6 @@ class Director {
         for (const [key, value] of Object.entries(this.buttons)) {
             this.app.stage.addChild(value.graphics);
         }
-
     }
 
     getSelectedColor() {
@@ -153,7 +154,6 @@ class Director {
     }
 
     getAdjacentBlock(direction, block) {
-        let newBlock = null;
         let x = block.pos.x[0];
         let y = block.pos.y[0];
         switch (direction) {
@@ -175,6 +175,14 @@ class Director {
         }
         else {
             return null;
+        }
+    }
+
+    initAdjacentBlocks() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].calculateAdjacentBlocks();
+            }
         }
     }
 
@@ -214,6 +222,7 @@ class Director {
         this.activeBlock.clearRoads();
         this.activeBlock.color = "Blank";
         this.activeBlock.renderCard();
+        this.updateScores();
     }
 
     updateColor(color) {
