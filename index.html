@@ -1,5 +1,11 @@
 <!doctype html>
 <html>
+  <style>
+    .flex-container {
+      display: flex;
+    }
+
+  </style>
   <head>
     <!-- <script src="https://pixijs.download/release/pixi.js"></script> -->
     <script src="pixi\pixi.min.js"></script>
@@ -11,12 +17,28 @@
     <script src="js/main.js"></script>
   </head>
   <body>
-    <div id="boardDiv"></div>
+    <div class="flex-container">
+      <div id="boardDiv"></div>
+      <div id="scoreDiv">
+            ===========<br>
+            Score:<br>
+            ===========<br>
+      </div>
+    </div>
+
     <fieldset id="additionalButtons">
       <legend>Additional settings:</legend>
       <input type="checkbox" id="drawRoads" name="drawRoads">
-      <label for="drawRoads">Draw roads</label>
+      <label for="drawRoads">Draw roads</label><br><br>
+
+      <button id="exportLayout" onCLick=exportLayout()>Export Layout</button>
+      <input type="text" id="exportOutput" name="exportOutput" readonly onClick=selectText(this)><br><Br>
+
+      <button id="importLayout" onClick=importLayout()>Import Layout</button>
+      <input type="text" id="importInput" name="importInput" onClick=selectText(this)>
+
     </fieldset>
-    <div id="scoreDiv"></div>
   </body>
+  <!--<input type='file' />
+  <br><img id="myImg" src="#">-->
 </html>

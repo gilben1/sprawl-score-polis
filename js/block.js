@@ -7,7 +7,6 @@ class Block {
         "E": false,
         "W": false,
     }
-    visual
     pos = { // 0 is index, 1 is adjusted real
         x: [0,0],
         y: [0,0]
@@ -27,7 +26,6 @@ class Block {
         "E": null,
         "W": null,
     }
-
 
     graphics
 
@@ -202,6 +200,13 @@ class Block {
         this.adjacent["S"] = director.getAdjacentBlock("S", this);
         this.adjacent["W"] = director.getAdjacentBlock("W", this);
         this.adjacent["E"] = director.getAdjacentBlock("E", this);
+    }
+
+    clearAdjacentBlocks(){
+        this.adjacent["N"] = null;
+        this.adjacent["S"] = null;
+        this.adjacent["W"] = null;
+        this.adjacent["E"] = null;
     }
 
     getAdjacentColors() {

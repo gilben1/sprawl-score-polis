@@ -45,6 +45,9 @@ class Score {
 
 
         scoreDiv.innerHTML = `
+            ===========<br>
+            Score:<br>
+            ===========<br>
             Resident: ${this.largest["Resident"]}<br>
             Park: ${this.largest["Park"]}<br>
             Commercial: ${this.largest["Commercial"]}<br>

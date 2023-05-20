@@ -24,11 +24,31 @@ let app = new Application({
 });
 
 window.onload = () => {
-    console.log("Appending app.view to ")
     let boardDiv = document.getElementById("boardDiv");
     boardDiv.appendChild(app.view);
 };
 
 director = new Director(app, null);
 director.initAdjacentBlocks();
-console.log(director.board)
+
+
+
+
+
+function selectText(textField) 
+{
+    textField.focus();
+    textField.select();
+}
+
+function exportLayout() {
+    let exportField = document.getElementById("exportOutput");
+    exportField.value = director.exportBoard();
+}
+
+function importLayout() {
+    let importField = document.getElementById("importInput");
+    if (importField.value) {
+        director.importBoard(importField.value);
+    }
+}

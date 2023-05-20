@@ -64,9 +64,6 @@ class Director {
             }
         }
 
-
-        console.info(this.board)
-
         // set up the block setting buttons
         this.buttons["Resident"] = new Button("Resident", 0, this.rows + 1);
         this.buttons["Park"] = new Button("Park", 1, this.rows + 1);
@@ -186,6 +183,16 @@ class Director {
         }
     }
 
+    // used in outputting board state, since cyclical references
+    // prevent stringification
+    clearAdjacentBlocks() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].clearAdjacentBlocks();
+            }
+        }
+    }
+
     calculateEdges() {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
@@ -231,4 +238,35 @@ class Director {
         this.updateScores();
     }
 
+    exportBoard() {
+        let printable = [...Array(this.rows)].map(e => Array(this.columns).fill(null));
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                printable[i][j] = {
+                    color: this.board[i][j].color,
+                    roads: this.board[i][j].roads,
+                    pos: this.board[i][j].pos,
+                }
+            }
+        }
+
+        let encoded = btoa(JSON.stringify(printable))
+        return encoded;
+    }
+
+    importBoard(base64String) {
+        let inputObject = JSON.parse(atob(base64String));
+
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].color = inputObject[i][j].color;
+                this.board[i][j].roads = inputObject[i][j].roads;
+                this.board[i][j].pos = inputObject[i][j].pos;
+                this.board[i][j].renderCard();
+            }
+        }
+        this.updateScores();
+        this.activeBlock = null;
+        this.activeButton = null;
+    }
 }
